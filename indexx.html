@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Birthday Surprise</title>
+
+<style>
+
+body{
+margin:0;
+background:black;
+color:white;
+font-family:Arial;
+text-align:center;
+overflow:auto;
+}
+
+.page{
+position:absolute;
+width:100%;
+height:100%;
+display:none;
+}
+
+.active{
+display:block;
+}
+
+/* gift */
+
+.gift{
+font-size:120px;
+margin-top:120px;
+cursor:pointer;
+}
+
+/* cake */
+
+.cake{
+font-size:120px;
+margin-top:120px;
+cursor:pointer;
+}
+
+/* REAL BALLOONS */
+
+.balloon{
+position:absolute;
+width:60px;
+height:80px;
+border-radius:50%;
+animation:float 8s linear infinite;
+}
+
+.balloon:after{
+content:'';
+position:absolute;
+width:2px;
+height:40px;
+background:white;
+left:50%;
+top:80px;
+}
+
+.red{background:red;}
+.blue{background:blue;}
+.yellow{background:yellow;}
+.pink{background:pink;}
+.green{background:lime;}
+
+@keyframes float{
+0%{transform:translateY(0);}
+100%{transform:translateY(-120vh);}
+}
+
+/* fireworks */
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:-1;
+}
+
+/* card */
+
+.card{
+background:white;
+color:black;
+width:300px;
+height:900px;
+margin:auto;
+margin-bottom: 200px;
+padding:20px;
+border-radius:15px;
+box-shadow:0 0 25px pink;
+}
+
+img{
+width:100%;
+border-radius:10px;
+cursor:pointer;
+}
+
+/* second image page */
+
+#photoPage img{
+width:300px;
+height:680px;
+margin-top:20px;
+border-radius:15px;
+}
+
+.tapText{
+margin-top:10px;
+font-size:18px;
+color:white;
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="fireworks"></canvas>
+
+<!-- PAGE 1 -->
+
+<div id="page1" class="page active">
+
+<h1 style="margin-top:100px;font-size:60px;color:pink;">
+Happiest Birthday My cute budhu Bacha🐣 
+</h1>
+
+<div class="gift" onclick="openGift()">🎁</div>
+
+<p>Click the Gift</p>
+
+</div> 
+
+<!-- PAGE 2 -->
+
+<div id="page2" class="page">
+
+<h1>Cut the Cake 🎂</h1>
+
+<div class="cake" onclick="cutCake()">🎂</div>
+
+<p id="cakeText"></p>
+
+</div>
+
+<!-- PAGE 3 CARD -->
+
+<div id="page3" class="page">
+
+<div class="card">
+<img src="shub.jpeg" onclick="openPhoto()">
+<p style="margin-top:10px;">Tap the image</p>
+
+<h2>Happyy happy wala Birthday my Chuja🐣</h2>
+<p>
+Wishing you endless smiles and success on this year.  
+May your day be full of joy . I can't express how much ur friendship means to me but i only saying to u that thx for staying with me like my shadow .u makes my life brighter ,every moment more fun every memory more special life is better with a frd like u.your friendship is one of the best gift life has given to me . No matter what the situation  & how busy life gets i'll  never let anything affect our friendship .U came into my life like the rains come & now i want this  forever yar🤜🤛.itni khusi ke mouke pe cuchh sa gu khana to banta hai💩ye lo khalo subah se kuchh khaya nhi hoga 🎉
+</p>
+
+</div>
+
+</div>
+
+<!-- PAGE 4 EXTRA IMAGE -->
+
+<div id="photoPage" class="page">
+<div class="tapText">You are for me 🤌🧿</div>
+<img src="WhatsApp Image 2026-03-12 at 9.15.46 PM (1).jpeg">
+
+
+</div>
+
+<script>
+
+/* page navigation */
+
+function openGift(){
+
+removeBalloons();
+
+document.getElementById("page1").classList.remove("active");
+document.getElementById("page2").classList.add("active");
+
+}
+
+function cutCake(){
+
+document.getElementById("cakeText").innerHTML="Cake Cut Successfully 🎉";
+
+setTimeout(function(){
+
+document.getElementById("page2").classList.remove("active");
+document.getElementById("page3").classList.add("active");
+
+},2000);
+
+}
+
+function openPhoto(){
+
+document.getElementById("page3").classList.remove("active");
+document.getElementById("photoPage").classList.add("active");
+
+}
+
+/* BALLOONS */
+
+let colors=["red","blue","yellow","pink","green"];
+let balloons=[];
+
+for(let i=0;i<15;i++){
+
+let b=document.createElement("div");
+
+b.className="balloon "+colors[Math.floor(Math.random()*colors.length)];
+
+b.style.left=Math.random()*100+"%";
+b.style.animationDuration=(6+Math.random()*5)+"s";
+
+document.body.appendChild(b);
+balloons.push(b);
+
+}
+
+function removeBalloons(){
+
+balloons.forEach(b=>b.remove());
+
+}
+
+/* FIREWORKS */
+
+const canvas=document.getElementById("fireworks");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+
+function createFirework(){
+
+let x=Math.random()*canvas.width;
+let y=Math.random()*canvas.height/2;
+
+for(let i=0;i<80;i++){
+
+particles.push({
+x:x,
+y:y,
+angle:Math.random()*2*Math.PI,
+speed:Math.random()*5+2,
+life:100,
+color:`hsl(${Math.random()*360},100%,50%)`
+})
+
+}
+
+}
+
+function update(){
+
+ctx.fillStyle="rgba(0,0,0,0.2)";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+particles.forEach((p,index)=>{
+
+p.x+=Math.cos(p.angle)*p.speed;
+p.y+=Math.sin(p.angle)*p.speed;
+
+p.life--;
+
+ctx.beginPath();
+ctx.arc(p.x,p.y,2,0,Math.PI*2);
+ctx.fillStyle=p.color;
+ctx.fill();
+
+if(p.life<=0){
+particles.splice(index,1);
+}
+
+});
+
+if(Math.random()<0.05){
+createFirework();
+}
+
+requestAnimationFrame(update);
+
+}
+
+update();
+
+</script>
+
+</body>
+</html>
